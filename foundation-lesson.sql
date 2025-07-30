@@ -43,11 +43,8 @@ Using a table alias (p in the example below) is good practice and helps in a few
 */
 SELECT
 	p.PatientId
-	
 	,p.Ward
-	
 	,p.Tariff
-	
 	,p.Hospital
 FROM
 	PatientStay p;
@@ -56,18 +53,25 @@ FROM
 Filter rows  with the WHERE clause
 Note: we can also AND and OR clauses
 */
+
 SELECT
 	ps.PatientId
-	
 	,ps.AdmittedDate
-	
 	,ps.Hospital
-	
 	,ps.Ward
-	
 	,ps.Tariff
 FROM
-	PatientStay ps;
+	PatientStay ps
+WHERE ps.Hospital IN ('Kingston', 'PRUH' )
+	AND ps.Ward LIKE '%Surgery'
+	AND ps.AdmittedDate >= '2024-02-27'
+	AND ps.AdmittedDate <= '2024-03-01'
+ORDER BY 
+	ps.AdmittedDate DESC, 
+	ps.Ward ASC
+
+
+
 
 /*
 some alternative WHERE clauses.  Try these out
@@ -82,21 +86,7 @@ _ means any single character
 % means 0 or more characters
 */
 
-SELECT
-	ps.PatientId
-	
-	,ps.AdmittedDate
-	
-	,ps.Hospital
-	
-	,ps.Ward
-	
-	,ps.Tariff
-FROM
-	PatientStay ps
-WHERE
-	ps.Hospital IN ('Kingston', 'PRUH');
---WHERE ps.Hospital LIKE 'Kin%'
+
 
 /*
 Sort: by the values of one or more columns with the ORDER BY clause
@@ -104,15 +94,12 @@ Sorts smallest to largest (ASCending) by default
 */
 
 -- ORDER BY a single column
+
 SELECT
 	ps.PatientId
-	
 	,ps.AdmittedDate
-	
 	,ps.Hospital
-	
 	,ps.Ward
-	
 	,ps.Tariff
 FROM
 	PatientStay ps
@@ -122,13 +109,9 @@ ORDER BY
 -- ORDER BY several columns
 SELECT
 	ps.PatientId
-	
 	,ps.AdmittedDate
-	
 	,ps.Hospital
-	
 	,ps.Ward
-	
 	,ps.Tariff
 FROM
 	PatientStay ps
