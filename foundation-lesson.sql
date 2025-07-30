@@ -57,6 +57,10 @@ Note: we can also AND and OR clauses
 SELECT
 	ps.PatientId
 	,ps.AdmittedDate
+	,ps.DischargeDate
+	,DATEADD(WEEK, -2, ps.AdmittedDate) AS ReminderDate
+	,DATEADD(month, 3, PS.DischargeDate) AS AppointmentDate -- 3 months post discharge	
+	,DATEDIFF(DAY, ps.AdmittedDate, ps.DischargeDate) AS DaysInHospital
 	,ps.Hospital
 	,ps.Ward
 	,ps.Tariff
@@ -64,11 +68,14 @@ FROM
 	PatientStay ps
 WHERE ps.Hospital IN ('Kingston', 'PRUH' )
 	AND ps.Ward LIKE '%Surgery'
-	AND ps.AdmittedDate >= '2024-02-27'
-	AND ps.AdmittedDate <= '2024-03-01'
+	AND ps.AdmittedDate BETWEEN DATEFROMPARTS(2024,2,26) AND DATEFROMPARTS(2024,3,1)
 ORDER BY 
 	ps.AdmittedDate DESC, 
 	ps.Ward ASC
+
+
+SELECT
+	DATEFROMPARTS(2025, 07, 30) AS TheDate
 
 
 
@@ -240,3 +247,16 @@ FROM
 	PatientStay ps
 	JOIN DimHospital h ON
 	ps.Hospital = h.Hospital;
+
+
+
+SELECT
+	ps.Hospital
+	,COUNT(*) AS NumberOfPatients	
+	,SUM(ps.Tariff) AS TotalTariff	
+	,AVG(PS.Tariff) AS AverageTariff
+FROM
+	PatientStay ps
+GROUP BY ps.Hospital
+ORDER BY NumberOfPatients DESC
+
